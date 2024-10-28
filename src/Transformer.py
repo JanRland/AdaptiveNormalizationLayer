@@ -12,7 +12,6 @@ This script contains the transformer network used in the paper.
 import torch.nn as nn
 import torch
 import numpy as np
-import math
 from AdaptiveNormalization import AdaptiveNorm
 
 
@@ -35,7 +34,7 @@ class PositionalEncoding(nn.Module):
         
         pe = torch.zeros(N_s, N_e)
         position = torch.arange(0, N_s, dtype=torch.float).unsqueeze(1)
-        div_term = torch.exp(torch.arange(0, N_e, 2).float() * -(math.log(10000.0) / N_e))
+        div_term = torch.exp(torch.arange(0, N_e, 2).float() * -(np.log(10000.0) / N_e))
         
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
