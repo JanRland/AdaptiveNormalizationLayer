@@ -12,9 +12,9 @@ This script contains the adaptive normalization layer used in the paper.
 import torch 
 import torch.nn as nn
 
-
+    
 class AdaptiveNorm(nn.Module):
-    def __init__(self, dimensions, statisticWeights=False):
+    def __init__(self, dimensions, statisticWeights=False, offset=0.):
         """
         
 
@@ -27,8 +27,14 @@ class AdaptiveNorm(nn.Module):
             If the initialized statistics is too high to update with gradient
             descent, we introduce the scaling factor m_w, v_w. 
             The default is False.
+        offset : Float
+            If an accurate estimate of the initial statistical moment is 
+            unavailable, you can tune it as a hyperparameter avoiding 
+            unstable training convergence. 
 
         """
+        
+        
         super(AdaptiveNorm, self).__init__()
         
         self.statWeights=statisticWeights
@@ -39,9 +45,12 @@ class AdaptiveNorm(nn.Module):
 
         self.gamma.requires_grad = True
         self.beta.requires_grad = True
+        
 
-        self.m=torch.nn.Parameter(torch.zeros(*dimensions))
+        self.m=torch.nn.Parameter(torch.ones(*dimensions)*offset)
         self.v=torch.nn.Parameter(torch.ones(*dimensions))
+            
+
 
         self.m.requires_grad = True
         self.v.requires_grad = True
@@ -56,7 +65,7 @@ class AdaptiveNorm(nn.Module):
         
     def forward(self, x):
         if self.statWeights:
-            x=torch.add(torch.mul(torch.div(torch.subtract(x,self.m*self.m_w),torch.sqrt(self.relu(self.v*self.v_w)+self.eps)), self.gamma), self.beta)
+            x=torch.add(torch.mul(torch.div(torch.subtract(x,self.beta),self.gamma), torch.sqrt(self.relu(self.v*self.v_w)+self.eps)), self.m*self.m_w)
         else:
-            x=torch.add(torch.mul(torch.div(torch.subtract(x,self.m),torch.sqrt(self.relu(self.v)+self.eps)), self.gamma), self.beta)
-        return x   
+            x=torch.add(torch.mul(torch.div(torch.subtract(x,self.beta),self.gamma), torch.sqrt(self.relu(self.v)+self.eps)), self.m)
+        return x  
