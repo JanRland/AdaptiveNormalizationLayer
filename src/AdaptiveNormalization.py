@@ -73,7 +73,7 @@ class AdaptiveNorm(nn.Module):
         
 class RedAdaptiveNorm(nn.Module):
     def __init__(self, dimensions, statisticWeights=False, offset=0):
-        super(AdaptiveNorm, self).__init__()
+        super(RedAdaptiveNorm, self).__init__()
         """
         This is a simplified version of adaptive normalization, reducing 
         the computational complexity of gradient descent from O(6kdn) to O(4kdn). 
