@@ -1,5 +1,5 @@
 # AdaptiveNormalizationLayer
-This repository includes the implementation of the adaptive normalization layer as presented in [Enhancing Deep Neural Network Training Through Learnable Adaptive Normalization][https://doi.org/10.1016/j.knosys.2025.113968]. It also provides the transformer network architecture designed specifically for cardiac arrhythmia classification.
+This repository includes the implementation of the adaptive normalization layer as presented in [Enhancing Deep Neural Network Training Through Learnable Adaptive Normalization](https://doi.org/10.1016/j.knosys.2025.113968). It also provides the transformer network architecture designed specifically for cardiac arrhythmia classification.
 
 ## Dependencies
 The Code was tested with following packages:
